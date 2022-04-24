@@ -9,6 +9,18 @@ import './Shop.css'
 const Shop = () => {
     const [products, setProducts] = useProducts()
     const [cart, setCart] = useState([])
+    const [pageCount, setPageCount] = useState(0)
+    const [page, setPage] = useState(0)
+    const [sixe, setSize] = useState(10)
+    useEffect(() => {
+        fetch('http://localhost:5000/productCount')
+            .then((res) => res.json())
+            .then((data) => {
+                const count = data.count
+                const pages = Math.ceil(count / 10)
+                setPageCount(pages)
+            })
+    }, [])
 
     useEffect(() => {
         const storedCart = getStoredCart()
@@ -53,8 +65,33 @@ const Shop = () => {
                         key={product._id}
                         product={product}
                         handleAddToCart={handleAddToCart}
-                    ></Product>
+                    />
                 ))}
+                <div className="flex">
+                    {[...Array(pageCount).keys()].map((number) => (
+                        <button
+                            onClick={() => setPage(number)}
+                            className={
+                                page === number
+                                    ? 'text-white bg-yellow-400 p-2 mr-2'
+                                    : 'border border-yellow-400 p-2 mr-2'
+                            }
+                        >
+                            {number}
+                        </button>
+                    ))}
+                    <select
+                        className="border border-yellow-400"
+                        onChange={(e) => setSize(e.target.value)}
+                    >
+                        <option value="5">5</option>
+                        <option value="10" selected>
+                            10
+                        </option>
+                        <option value="15">15</option>
+                        <option value="20">20</option>
+                    </select>
+                </div>
             </div>
             <div className="cart-container">
                 <Cart cart={cart}>
