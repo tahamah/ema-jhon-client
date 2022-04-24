@@ -63,10 +63,12 @@ const Shop = () => {
                         />
                     ))}
                 </div>
-                <div className="cart-container">
+                <div className="cart-container ">
                     <Cart cart={cart}>
                         <Link to="/orders">
-                            <button>Review Order </button>
+                            <button className="mt-5 px-4 py-1 rounded-lg border bg-white font-bold hover:bg-[#ff9900] hover:text-white hover:translate-x-4 border-[#ff9900] duration-500">
+                                Review Order
+                            </button>
                         </Link>
                     </Cart>
                 </div>

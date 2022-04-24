@@ -8,7 +8,6 @@ import ReviewItem from '../ReviewItem/ReviewItem'
 import './Orders.css'
 
 const Orders = () => {
-    const [products, setProducts] = useProducts()
     const [cart, setCart] = useCart()
     const navigate = useNavigate()
     const handleRemoveProduct = (product) => {
@@ -30,7 +29,10 @@ const Orders = () => {
             </div>
             <div className="cart-container">
                 <Cart cart={cart}>
-                    <button onClick={() => navigate('/shipment')}>
+                    <button
+                        className="mt-5 px-4 py-1 rounded-lg border bg-white font-bold hover:bg-[#ff9900] hover:text-white hover:translate-x-4 border-[#ff9900] duration-500"
+                        onClick={() => navigate('/shipment')}
+                    >
                         Proceed Shipping{' '}
                     </button>
                 </Cart>
