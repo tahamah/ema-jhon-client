@@ -7,11 +7,18 @@ import Product from '../Product/Product'
 import './Shop.css'
 
 const Shop = () => {
-    const [products, setProducts] = useProducts()
     const [cart, setCart] = useState([])
     const [pageCount, setPageCount] = useState(0)
     const [page, setPage] = useState(0)
-    const [sixe, setSize] = useState(10)
+    const [size, setSize] = useState(10)
+    const [products, setProducts] = useState([])
+
+    useEffect(() => {
+        fetch(`http://localhost:5000/products?page=${page}&size=${size}`)
+            .then((res) => res.json())
+            .then((data) => setProducts(data))
+    }, [page, size])
+
     useEffect(() => {
         fetch('http://localhost:5000/productCount')
             .then((res) => res.json())
@@ -58,49 +65,51 @@ const Shop = () => {
     }
 
     return (
-        <div className="shop-container">
-            <div className="products-container">
-                {products.map((product) => (
-                    <Product
-                        key={product._id}
-                        product={product}
-                        handleAddToCart={handleAddToCart}
-                    />
-                ))}
-                <div className="flex">
-                    {[...Array(pageCount).keys()].map((number) => (
-                        <button
-                            onClick={() => setPage(number)}
-                            className={
-                                page === number
-                                    ? 'text-white bg-yellow-400 p-2 mr-2'
-                                    : 'border border-yellow-400 p-2 mr-2'
-                            }
-                        >
-                            {number}
-                        </button>
+        <>
+            <div className="shop-container">
+                <div className="products-container">
+                    {products.map((product) => (
+                        <Product
+                            key={product._id}
+                            product={product}
+                            handleAddToCart={handleAddToCart}
+                        />
                     ))}
-                    <select
-                        className="border border-yellow-400"
-                        onChange={(e) => setSize(e.target.value)}
-                    >
-                        <option value="5">5</option>
-                        <option value="10" selected>
-                            10
-                        </option>
-                        <option value="15">15</option>
-                        <option value="20">20</option>
-                    </select>
+                </div>
+                <div className="cart-container">
+                    <Cart cart={cart}>
+                        <Link to="/orders">
+                            <button>Review Order </button>
+                        </Link>
+                    </Cart>
                 </div>
             </div>
-            <div className="cart-container">
-                <Cart cart={cart}>
-                    <Link to="/orders">
-                        <button>Review Order </button>
-                    </Link>
-                </Cart>
+            <div className="flex ml-10 mb-10">
+                {[...Array(pageCount).keys()].map((number) => (
+                    <button
+                        onClick={() => setPage(number)}
+                        className={
+                            page === number
+                                ? 'text-white bg-yellow-400 p-2 mr-2'
+                                : 'border border-yellow-400 p-2 mr-2'
+                        }
+                    >
+                        {number}
+                    </button>
+                ))}
+                <select
+                    className="border border-yellow-400"
+                    onChange={(e) => setSize(e.target.value)}
+                >
+                    <option value="5">5</option>
+                    <option value="10" selected>
+                        10
+                    </option>
+                    <option value="15">15</option>
+                    <option value="20">20</option>
+                </select>
             </div>
-        </div>
+        </>
     )
 }
 
